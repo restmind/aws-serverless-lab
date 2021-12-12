@@ -1,0 +1,52 @@
+service: bosch-service
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-2
+  memorySize: 512
+  # ecr:
+  #   # In this section you can define images that will be built locally and uploaded to ECR
+  #   images:
+  #     appimage:
+  #       path: ./
+
+functions:
+  BoschFunc:
+    # image:
+    #   name: appimage
+      # entryPoint:
+      #   - '/lambda-entrypoint.sh'
+    handler: index.handler
+    events:
+      # - httpApi: '*'
+
+      - http:
+          path: item
+          method: get
+          cors: true
+      - http:
+          path: item/{id}
+          method: get
+          cors: true
+      - http:
+          path: item
+          method: post
+          cors: true
+      - http:
+          path: item/{id}
+          method: put
+          cors: true
+      - http:
+          path: item/{id}
+          method: delete
+          cors: true
+       
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
